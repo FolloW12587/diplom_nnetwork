@@ -1,0 +1,7 @@
+.pyx
+.pyc
+.json
+.vscode
+.cpython-37.pyc
+
+__pycache__/
