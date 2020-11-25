@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>609</height>
+    <height>457</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,7 +36,7 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>240</y>
+      <y>90</y>
       <width>801</width>
       <height>16</height>
      </rect>
@@ -49,7 +49,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>260</y>
+      <y>110</y>
       <width>91</width>
       <height>16</height>
      </rect>
@@ -67,7 +67,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>330</y>
+      <y>180</y>
       <width>191</width>
       <height>131</height>
      </rect>
@@ -107,7 +107,7 @@
     <property name="geometry">
      <rect>
       <x>387</x>
-      <y>530</y>
+      <y>380</y>
       <width>391</width>
       <height>23</height>
      </rect>
@@ -159,7 +159,7 @@
     <property name="geometry">
      <rect>
       <x>380</x>
-      <y>270</y>
+      <y>120</y>
       <width>401</width>
       <height>231</height>
      </rect>
@@ -219,7 +219,7 @@
     <property name="geometry">
      <rect>
       <x>380</x>
-      <y>490</y>
+      <y>340</y>
       <width>401</width>
       <height>25</height>
      </rect>
@@ -248,11 +248,11 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>464</x>
-      <y>200</y>
+      <x>470</x>
+      <y>60</y>
       <width>311</width>
       <height>25</height>
      </rect>
@@ -280,6 +280,32 @@
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QLabel" name="labelCountParams">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>60</y>
+      <width>171</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Количество параметров модели:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="textCountParams">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>60</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

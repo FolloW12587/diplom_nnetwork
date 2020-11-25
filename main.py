@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtCore
 from designs.design import Ui_MainWindow  
 from designs.parser_design import Ui_Form as Ui_Form_parser
 from designs.model_train_design import Ui_Form as Ui_Form_model_train
+from designs.model_test_design import Ui_Form as Ui_Form_model_test
 import sys
 import os
 
@@ -32,13 +33,50 @@ class parserForm(QtWidgets.QWidget):
             settings.PROC = float(self.ui.textProc.text())
             settings.STEP = int(self.ui.textStep.text())
             dir_name = self.ui.textBrowseDataFolder.text()
+            self.ui.buttonParseData.setEnabled(False)
             self.main_window.parseData(dir_name)
         except ValueError:
+            self.ui.buttonParseData.setEnabled(True)
             self.showErrorDialog("Incorrect values!")
 
     def showErrorDialog(self, message):
         error_dialog = QtWidgets.QErrorMessage(self)
         error_dialog.showMessage(message)
+
+
+class modelTestForm(QtWidgets.QWidget):
+    def __init__(self):
+        super(modelTestForm, self).__init__()
+        self.ui = Ui_Form_model_test()
+        self.ui.setupUi(self)
+
+    def getFormFields(self, data_type):
+        if data_type == 'train':
+            return [
+                self.ui.textTrainCount,
+                self.ui.textTrainCountOurs,
+                self.ui.textTrainAvgAcc,
+                self.ui.textTrainOursError,
+                self.ui.textTrainRatioError,
+                self.ui.textTrainCountAliens,
+                self.ui.textTrainAliensError,
+                self.ui.textTrainAliensRatioError,
+                self.ui.textTrainHemmingDistance,
+            ]
+        elif data_type == 'test':
+            return[
+                self.ui.textTestCount,
+                self.ui.textTestCountOurs,
+                self.ui.textTestAvgAcc,
+                self.ui.textTestOursError,
+                self.ui.textTestRatioError,
+                self.ui.textTestCountAliens,
+                self.ui.textTestAliensError,
+                self.ui.textTestAliensRatioError,
+                self.ui.textTestHemmingDistance,
+            ]
+        else:
+            return []
 
 
 class modelTrainForm(QtWidgets.QWidget):
@@ -66,8 +104,10 @@ class modelTrainForm(QtWidgets.QWidget):
             settings.BATCH_SIZE = int(self.ui.textBatchSize.text())
             settings.EPOCHS = int(self.ui.textEpochs.text())
             settings.VALIDATION_SPLIT = float(self.ui.textValidationSplit.text())
+            self.ui.buttonTrain.setEnabled(False)
             self.main_window.trainModel()
         except ValueError as e:
+            self.ui.buttonTrain.setEnabled(True)
             self.showErrorDialog("Incorrect values!")
 
     def get_progress(self):
@@ -79,6 +119,8 @@ class modelTrainForm(QtWidgets.QWidget):
 
  
 class mywindow(QtWidgets.QMainWindow):
+    parseProgressChanged = QtCore.pyqtSignal(int)
+    parseProgressMaximumChanged = QtCore.pyqtSignal(int)
     def __init__(self):
         super(mywindow, self).__init__()
         self.ui = Ui_MainWindow()
@@ -86,6 +128,7 @@ class mywindow(QtWidgets.QMainWindow):
 
         self.parserForm = parserForm(self)
         self.modelTrainForm = modelTrainForm(self)
+        self.modelTestForm = modelTestForm()
 
         self.nnetwork = NNetwork()
 
@@ -104,6 +147,8 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.buttonYtrain.clicked.connect(lambda: self.browseDataFile(self.ui.textYtrain))
         self.ui.buttonXtest.clicked.connect(lambda: self.browseDataFile(self.ui.textXtest))
         self.ui.buttonYtest.clicked.connect(lambda: self.browseDataFile(self.ui.textYtest))
+        self.parseProgressChanged.connect(self.ui.progressData.setValue)
+        self.parseProgressMaximumChanged.connect(self.ui.progressData.setMaximum)
 
 
     def browseModel(self):
@@ -114,9 +159,11 @@ class mywindow(QtWidgets.QMainWindow):
         file_name = self.ui.textModelName.text()
         try:
             f = open(file_name, 'r')
-            if not self.nnetwork.uploadModel(file_name):
-                self.showErrorDialog('Error in loading model!')
             f.close()
+            count_params = self.nnetwork.uploadModel(file_name)
+            if not count_params:
+                self.showErrorDialog('Error in loading model!')
+            self.ui.textCountParams.setText("{:d}".format(count_params))
         except FileNotFoundError:
             self.showErrorDialog('File not found!')
             self.ui.textModelName.setText('')
@@ -133,7 +180,8 @@ class mywindow(QtWidgets.QMainWindow):
             self.showErrorDialog('Error in saving model!')
 
     def createModel(self):
-        self.nnetwork.createModel()
+        count_params = self.nnetwork.createModel()
+        self.ui.textCountParams.setText("{:d}".format(count_params))
 
     def parseDataAction(self):
         if self.parserForm:
@@ -143,13 +191,19 @@ class mywindow(QtWidgets.QMainWindow):
         self.parserForm = None
 
     def parseData(self, dir_name):
-        progress = self.ui.progressData
-        if not self.nnetwork.parseData(dir_name, progress):
+        self.parseTread = self.nnetwork.parseData(dir_name, self)
+        if not self.parseTread:
+            self.parseTread = None
             self.showErrorDialog('Error in parsing data')
         else:
-            self.ui.textTrainCount.setText(str(len(self.nnetwork.data[0])))
-            self.ui.textTestCount.setText(str(len(self.nnetwork.data[2])))
-            self.destoyParseWindow()
+            self.parseTread.finished.connect(self.parseFinished)
+            self.parseTread.start()
+            
+    def parseFinished(self):
+        self.nnetwork.data = self.parseTread.data
+        self.ui.textTrainCount.setText(str(len(self.nnetwork.data[0])))
+        self.ui.textTestCount.setText(str(len(self.nnetwork.data[2])))
+        self.destoyParseWindow()
 
     def saveParsedData(self):
         if not self.nnetwork.data:
@@ -187,18 +241,22 @@ class mywindow(QtWidgets.QMainWindow):
             self.showErrorDialog('You should upload data and model!')
             return
         self.thread = self.nnetwork.trainModel(self.modelTrainForm)
+        self.thread.finished.connect(self.trainFinished)
         self.thread.start()
-        # self.destoyModelTrainWindow()
-    
-    def destoyModelTrainWindow(self):
+
+    def trainFinished(self):
+        self.modelTrainForm.ui.buttonTrain.setEnabled(True)
+        self.nnetwork.history = self.thread.history
         self.modelTrainForm.hide()
+        self.testModel()
 
     def testModel(self):
         if not self.nnetwork.data or not self.nnetwork.model:
             self.showErrorDialog('You should upload data and model!')
             return
-        self.nnetwork.testModel()
-    
+        self.modelTestForm.show()
+        self.nnetwork.testModel(self.modelTestForm)
+
  
 app = QtWidgets.QApplication([])
 application = mywindow()

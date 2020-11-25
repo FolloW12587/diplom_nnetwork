@@ -1,17 +1,12 @@
 import os
-import pandas as pd
 import numpy as np
 import tensorflow
-# print(tensorflow.__version__)
+
 from tensorflow.keras import Sequential
-# from keras.models import Sequential, load_model
-from keras.models import load_model
-# from keras.layers import Dense, Dropout, Flatten
-# from keras.layers.convolutional import Conv1D, MaxPooling1D
+from tensorflow.keras.models import load_model
 from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D
-# from tensorflow.keras.layers.convolutional import Conv1D, MaxPooling1D
 from datetime import datetime
-from threads import TrainModelThread
+from threads import TrainModelThread, ParserThread
 
 
 import Parser
@@ -29,6 +24,8 @@ class NNetwork:
     def uploadModel(self, file):
         try:
             self.model = load_model(file)
+            self.model.summary()
+            return self.model.count_params()
         except:
             return False
         return True
@@ -41,8 +38,6 @@ class NNetwork:
             return False
 
     def createModel(self):
-        # tensorflow.config.run_functions_eagerly(True)
-        # print(tensorflow.executing_eagerly())
         self.model = None
         self.model = Sequential()
         self.model.add(Conv1D(64, 5, data_format='channels_first', input_shape=(settings.CHANNELS_NUM, settings.STEP), activation='relu', padding='same'))
@@ -60,16 +55,15 @@ class NNetwork:
         self.model.add(Dropout(0.5))
         self.model.add(Dense(len(settings.KEY_l), activation='sigmoid'))
         # self.model.add(Dense(1, activation='sigmoid'))
-        # self.model.run_eagerly = True
         # self.model.compile(loss='binary_crossentropy',optimizer="SGD", metrics=["accuracy"]) #  run_eagerly=True
         self.model.compile(loss='mse',optimizer="Adam", metrics=["mae"]) #  run_eagerly=True
         self.model.summary()
+        return self.model.count_params()
 
-    def parseData(self, dir_name, progress):
+    def parseData(self, dir_name, form):
         if self.data:
             return False
-        self.data = Parser.get_data(dir_name, progress)
-        return True
+        return ParserThread(dir_name, form)
 
     def getParsedData(self, progress, x_train_name, y_train_name, x_test_name=None, y_test_name=None):
         if self.data:
@@ -108,26 +102,14 @@ class NNetwork:
 
     def trainModel(self, form):
         if self.data and self.model:
-            # self.history = self.model.fit(self.data[0], self.data[1], 
-            #     batch_size=settings.BATCH_SIZE, 
-            #     epochs=settings.EPOCHS,
-            #     validation_split=settings.VALIDATION_SPLIT,
-            #     verbose=settings.VERBOSE,
-            #     shuffle=True, 
-            #     callbacks=[CustomCallback(progress, loss, acc),])
             return TrainModelThread(self.data, self.model, form)
 
-    def testModel(self):
-        self.testOnData(self.data[2], self.data[3])
-
-        # x = np.append(self.data[0].transpose(), self.data[2].transpose(), axis=len(self.data[0].shape) - 1)
-        # x = x.transpose()
-        # y = np.append(self.data[1], self.data[3])
-        # self.testOnData(x, y)
-        self.testOnData(self.data[0], self.data[1])
+    def testModel(self, form):
+        self.testOnData(self.data[0], self.data[1], form, 'train')
+        self.testOnData(self.data[2], self.data[3], form, 'test')
 
 
-    def score_errors(self, prediction, y):
+    def score_errors(self, prediction, y, form, data_type):
         first_all = 0
         first_false = 0
         first_acc = 0
@@ -136,9 +118,13 @@ class NNetwork:
         second_false = 0
         second_acc = 0
         second_max_acc = 0
+        second_hd_avg = 0
+        second_hd_max = 0
+        second_hd_min = 1
         for i in range(len(prediction)):
-            d = np.less(np.abs(np.array(y[i]) - np.array(prediction[i])), [settings.MODUL / 2]*len(settings.KEY_l)).astype('int')
-            s = np.sum(d)
+            # d = np.less(np.abs(np.array(y[i]) - np.array(prediction[i])), [settings.MODUL / 2]*len(settings.KEY_l)).astype('int')
+            # s = np.sum(d)
+            s = self.Hemming_distance(np.array(y[i]), np.array(prediction[i]))
             
             acc = s/len(settings.KEY_l)
             if (y[i] == np.array(settings.KEY_l)).all():
@@ -146,27 +132,51 @@ class NNetwork:
                 first_acc += acc
                 if acc > first_max_acc:
                     first_max_acc = acc
-                if s < len(settings.KEY_l):
+                if acc < 1:
                     first_false += 1
             else:
                 second_all += 1
                 second_acc += acc
                 if acc > second_max_acc:
                     second_max_acc = acc
-                if (np.array(prediction[i]) == np.array(settings.KEY_l)).all():
+                
+                d = self.Hemming_distance(np.array(prediction[i]), np.array(settings.KEY_l))/len(settings.KEY_l)
+                second_hd_avg += d
+                if d > second_hd_max:
+                    second_hd_max = d
+                if d < second_hd_min:
+                    second_hd_min = d
+                if d == 0:
                     second_false += 1
 
         first_error = first_false / first_all
         second_error = second_false / second_all
         first_acc_avg = first_acc / first_all
         second_acc_avg = second_acc / second_all
+        second_hd_avg = second_hd_avg / second_all
+
+        form_fields = form.getFormFields(data_type)
+        if len(form_fields) != 0:
+            form_fields[0].setText("{:d}".format(len(prediction)))
+            form_fields[1].setText("{:d}".format(first_all))
+            form_fields[2].setText("{:d}".format(first_false))
+            form_fields[3].setText("{:.5f}".format(first_error))
+            form_fields[4].setText("{:.5f}".format(first_acc_avg))
+            form_fields[5].setText("{:d}".format(second_all))
+            form_fields[6].setText("{:d}".format(second_false))
+            form_fields[7].setText("{:.5f}".format(second_error))
+            form_fields[8].setText("{:.5f}".format(second_hd_avg))
 
         print("Количество тестовых данных = ", len(prediction))
-        print('Полное количество "своих" = {a}, количество ложных срабатываний = {f}, отношение ложных срабатываний к всем "своим" = {e}, средняя точность = {a_a}, max_acc = {m_a}'.format(a = first_all, f = first_false, e=first_error, a_a=first_acc_avg, m_a=first_max_acc))
-        print('Полное количество "чужих" = {a}, количество ложных пропусков = {f}, отношение ложных пропусков ко всем "чужим" = {e}, средняя точность = {a_a}, max_acc = {m_a}'.format(a = second_all, f = second_false, e=second_error, a_a=second_acc_avg, m_a=second_max_acc))
+        print('Полное количество "своих" = {a:d}, количество ложных срабатываний = {f:d}, отношение ложных срабатываний к всем "своим" = {e:.5f}, средняя точность = {a_a:.5f}, max_acc = {m_a:.5f}'.format(a = first_all, f = first_false, e=first_error, a_a=first_acc_avg, m_a=first_max_acc))
+        print('Полное количество "чужих" = {a:d}, количество ложных пропусков = {f:d}, отношение ложных пропусков ко всем "чужим" = {e:.5f}, среднее расстояние Хемминга = {hd_a:.5f}, max расстояние Хемминга = {hd_max:.5f}, min расстояние Хемминга = {hd_min:.5f}'.format(a=second_all, f=second_false, e=second_error, hd_a=second_hd_avg, hd_max=second_hd_max, hd_min=second_hd_min))
 
-    def testOnData(self, x, y):
+    def testOnData(self, x, y, form, data_type):
         scores = self.model.evaluate(x, y)
-        print("Доля верных ответов на тестовых данных, в процентах:", round(scores[1] * 100, 4))
+        # print("Доля верных ответов на тестовых данных, в процентах:", round(scores[1] * 100, 4))
         prediction = self.model.predict(x)
-        self.score_errors(prediction, y)
+        self.score_errors(prediction, y, form, data_type)
+
+    def Hemming_distance(self, x, y):
+        d = np.less(np.abs(x - y), [settings.MODUL / 2]*len(x)).astype('int')
+        return np.sum(d)

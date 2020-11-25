@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\program_diplom\model_train.ui'
+# Form implementation generated from reading ui file '.\program_diplom\designs\model_train.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -74,7 +74,7 @@ class Ui_Form(object):
         self.textEpochs.setObjectName("textEpochs")
         self.gridLayout.addWidget(self.textEpochs, 1, 1, 1, 1)
         self.progressTrain = QtWidgets.QProgressBar(Form)
-        self.progressTrain.setGeometry(QtCore.QRect(20, 250, 381, 23))
+        self.progressTrain.setGeometry(QtCore.QRect(20, 260, 381, 23))
         self.progressTrain.setProperty("value", 0)
         self.progressTrain.setTextVisible(False)
         self.progressTrain.setObjectName("progressTrain")
@@ -82,7 +82,7 @@ class Ui_Form(object):
         self.buttonTrain.setGeometry(QtCore.QRect(170, 290, 75, 23))
         self.buttonTrain.setObjectName("buttonTrain")
         self.horizontalLayoutWidget = QtWidgets.QWidget(Form)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 200, 381, 31))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 200, 381, 41))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
@@ -127,6 +127,7 @@ class Ui_Form(object):
         self.labelAcc.setSizePolicy(sizePolicy)
         self.labelAcc.setMaximumSize(QtCore.QSize(85, 16777215))
         self.labelAcc.setAlignment(QtCore.Qt.AlignCenter)
+        self.labelAcc.setWordWrap(True)
         self.labelAcc.setObjectName("labelAcc")
         self.horizontalLayout.addWidget(self.labelAcc)
         self.textAcc = QtWidgets.QLineEdit(self.horizontalLayoutWidget)
@@ -151,5 +152,5 @@ class Ui_Form(object):
         self.labelValidationSplit.setText(_translate("Form", "Validation_split - Доля данных обучения, которые будут использоваться в качестве данных проверки."))
         self.buttonTrain.setText(_translate("Form", "Train"))
         self.labelLoss.setText(_translate("Form", "Потери:"))
-        self.labelAcc.setText(_translate("Form", "Процент успеха:"))
+        self.labelAcc.setText(_translate("Form", "Средняя абсолютная ошибка"))
 

@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import random
 import os
-from scipy.signal import butter, lfilter, find_peaks
+from scipy.signal import butter, lfilter
 from datetime import datetime
 
 import settings
@@ -30,19 +30,21 @@ def butter_filter(df, lowcut, highcut, fs, order): #обработка кажд�
         new_df[col] = y
     return new_df
 
-def get_row(dir_name, progress): #получить сырые данные
+def get_row(dir_name, form): #получить сырые данные
     dirs = os.listdir(dir_name)
-    dirs = dirs[0:2] #уменьшить количество папок для теста парсера
+    # dirs = dirs[0:2] #уменьшить количество папок для теста парсера
     # ours_path = random.choice(dirs) #рандомно выбирает, чей образ будет свой
     ours_path = dirs[1] #принудительный выбор испытуемого для образа "свой"
-    progress.setMinimum(0)
-    progress.setMaximum(len(dirs))
+    # progress.setMinimum(0)
+    # progress.setMaximum(len(dirs))
+    form.parseProgressMaximumChanged.emit(len(dirs))
     cur_value = 0
     print('our_path = ', str(ours_path))
     our = []
     alien = []
     for directory in dirs:
-        progress.setValue(cur_value)
+        # progress.setValue(cur_value)
+        form.parseProgressChanged.emit(cur_value)
         print(str(datetime.now()) + ' ' + directory)
         curr_path = dir_name + '\\' + directory + '\\'
         for i in range(1, len(os.listdir(curr_path))):
@@ -65,7 +67,8 @@ def get_row(dir_name, progress): #получить сырые данные
                             # alien = np.append(alien, df_small_n, axis=0)
                             alien.append(df_small_n)
         cur_value += 1
-    progress.setValue(len(dirs))
+    # progress.setValue(len(dirs))
+    form.parseProgressChanged.emit(cur_value)
     return our, alien
 
 
@@ -80,8 +83,8 @@ def get_datasets(mass, i):
     mass_test_y = [i,] * len_test
     return mass_train, mass_train_y, mass_test, mass_test_y
 
-def get_data(dir_name, progress):
-    our, alien = get_row(dir_name, progress)
+def get_data(dir_name, form):
+    our, alien = get_row(dir_name, form)
     x_train, y_train, x_test, y_test = split_data(our, alien)
     return np.array(x_train), np.array(y_train), np.array(x_test), np.array(y_test)
 
