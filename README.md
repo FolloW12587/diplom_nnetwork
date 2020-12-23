@@ -13,9 +13,11 @@
 ## Installation
 
 Clone the repopsitory:
+
     git clone git@github.com:FolloW12587/diplom_nnetwork.git
 
 Install the dependencies:
+
     pip install -r requirements.txt
 
 ## Settings
@@ -45,7 +47,9 @@ KEY_l = [1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0,
 ## Usage
 
 If you haven't got trained model. You can do it with `learning.py` module:
+
     python learning.py
 
 When you got your model you can use it with `authenticate.py` module:
+
     python authenticate.py
