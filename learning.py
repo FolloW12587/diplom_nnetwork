@@ -55,9 +55,9 @@ class modelTestForm(QtWidgets.QWidget):
             return [
                 self.ui.textTrainCount,
                 self.ui.textTrainCountOurs,
-                self.ui.textTrainAvgAcc,
                 self.ui.textTrainOursError,
                 self.ui.textTrainRatioError,
+                self.ui.textTrainAvgAcc,
                 self.ui.textTrainCountAliens,
                 self.ui.textTrainAliensError,
                 self.ui.textTrainAliensRatioError,
@@ -67,9 +67,9 @@ class modelTestForm(QtWidgets.QWidget):
             return[
                 self.ui.textTestCount,
                 self.ui.textTestCountOurs,
-                self.ui.textTestAvgAcc,
                 self.ui.textTestOursError,
                 self.ui.textTestRatioError,
+                self.ui.textTestAvgAcc,
                 self.ui.textTestCountAliens,
                 self.ui.textTestAliensError,
                 self.ui.textTestAliensRatioError,
@@ -257,9 +257,10 @@ class mywindow(QtWidgets.QMainWindow):
         self.modelTestForm.show()
         self.nnetwork.testModel(self.modelTestForm)
 
- 
-app = QtWidgets.QApplication([])
-application = mywindow()
-application.show()
- 
-sys.exit(app.exec())
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication([])
+    application = mywindow()
+    application.show()
+    
+    sys.exit(app.exec())

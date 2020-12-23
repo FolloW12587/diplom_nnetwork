@@ -1,7 +1,9 @@
 from keras.callbacks import Callback
+from tensorflow.keras.callbacks import EarlyStopping
 from math import ceil
 
 import settings
+
 
 class CustomCallback(Callback):
     def __init__(self, form):
@@ -29,5 +31,4 @@ class CustomCallback(Callback):
             self.form.lossChanged.emit("{:.4f}".format(logs['loss']))
 
     def on_train_end(self, logs=None):
-        # self.progress.setValue(self.maximum)
         self.form.progressChanged.emit(self.maximum)

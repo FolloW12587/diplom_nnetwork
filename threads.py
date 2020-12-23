@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QThread
 
 import settings
-from model_callback import CustomCallback
+from model_callback import CustomCallback, EarlyStopping
 import Parser
 
 

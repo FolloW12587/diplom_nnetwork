@@ -73,10 +73,10 @@
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="textTestCount">
+     <item row="0" column="0">
+      <widget class="QLabel" name="labelTrainCount">
        <property name="text">
-        <string>0</string>
+        <string>Образов для обучения:</string>
        </property>
       </widget>
      </item>
@@ -87,15 +87,15 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="labelTrainCount">
+     <item row="0" column="1">
+      <widget class="QLabel" name="textTrainCount">
        <property name="text">
-        <string>Образов для обучения:</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="textTrainCount">
+     <item row="1" column="1">
+      <widget class="QLabel" name="textTestCount">
        <property name="text">
         <string>0</string>
        </property>
@@ -294,12 +294,12 @@
      <string>Количество параметров модели:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="textCountParams">
+   <widget class="QLabel" name="textCountParams">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>200</x>
       <y>60</y>
-      <width>71</width>
+      <width>47</width>
       <height>20</height>
      </rect>
     </property>

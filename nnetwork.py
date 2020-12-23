@@ -12,7 +12,6 @@ from threads import TrainModelThread, ParserThread
 import Parser
 import settings
 from model_callback import CustomCallback
-from custom_losses import CustomBinaryCrossEntropy
 
 
 class NNetwork:
@@ -23,6 +22,7 @@ class NNetwork:
 
     def uploadModel(self, file):
         try:
+            del self.model
             self.model = load_model(file)
             self.model.summary()
             return self.model.count_params()
@@ -38,25 +38,23 @@ class NNetwork:
             return False
 
     def createModel(self):
-        self.model = None
+        del self.model
         self.model = Sequential()
         self.model.add(Conv1D(64, 5, data_format='channels_first', input_shape=(settings.CHANNELS_NUM, settings.STEP), activation='relu', padding='same'))
         self.model.add(Conv1D(64, 5, activation='relu', padding='same',data_format='channels_first'))
         self.model.add(MaxPooling1D(2,data_format='channels_first'))
-        # Слой регуляризации Dropout
+
         self.model.add(Dropout(0.25))
         self.model.add(Conv1D(128, 5, activation='relu', padding='same',data_format='channels_first'))
         self.model.add(Conv1D(128, 5, activation='relu', padding='same',data_format='channels_first'))
         self.model.add(MaxPooling1D(2,data_format='channels_first'))
-        # Слой регуляризации Dropout
+
         self.model.add(Dropout(0.25))
         self.model.add(Flatten())
         self.model.add(Dense(1000, activation='relu'))
         self.model.add(Dropout(0.5))
         self.model.add(Dense(len(settings.KEY_l), activation='sigmoid'))
-        # self.model.add(Dense(1, activation='sigmoid'))
-        # self.model.compile(loss='binary_crossentropy',optimizer="SGD", metrics=["accuracy"]) #  run_eagerly=True
-        self.model.compile(loss='mse',optimizer="Adam", metrics=["mae"]) #  run_eagerly=True
+        self.model.compile(loss='mse',optimizer="Adam", metrics=["mae"])
         self.model.summary()
         return self.model.count_params()
 
@@ -121,18 +119,17 @@ class NNetwork:
         second_hd_avg = 0
         second_hd_max = 0
         second_hd_min = 1
-        for i in range(len(prediction)):
-            # d = np.less(np.abs(np.array(y[i]) - np.array(prediction[i])), [settings.MODUL / 2]*len(settings.KEY_l)).astype('int')
-            # s = np.sum(d)
+
+        for i in range(len(prediction)): 
             s = self.Hemming_distance(np.array(y[i]), np.array(prediction[i]))
             
-            acc = s/len(settings.KEY_l)
+            acc = (1 - s/len(settings.KEY_l))
             if (y[i] == np.array(settings.KEY_l)).all():
                 first_all += 1
                 first_acc += acc
                 if acc > first_max_acc:
                     first_max_acc = acc
-                if acc < 1:
+                if s > 0:
                     first_false += 1
             else:
                 second_all += 1
@@ -173,10 +170,23 @@ class NNetwork:
 
     def testOnData(self, x, y, form, data_type):
         scores = self.model.evaluate(x, y)
-        # print("Доля верных ответов на тестовых данных, в процентах:", round(scores[1] * 100, 4))
         prediction = self.model.predict(x)
         self.score_errors(prediction, y, form, data_type)
 
-    def Hemming_distance(self, x, y):
-        d = np.less(np.abs(x - y), [settings.MODUL / 2]*len(x)).astype('int')
+    def Hemming_distance(self, x, y): 
+        d = np.greater(np.abs(x - y), [settings.MODUL / 2]*len(x)).astype('int')
         return np.sum(d)
+
+    def getKeyOfImage(self, test_image):
+        prediction = self.model.predict(np.array([test_image,]))
+        return self.get_key_from_list(prediction[0])
+
+    def get_key_from_list(self, l):
+        key_str = ''
+        for c in l:
+            m = c % settings.MODUL
+            key_code = (c - m)/settings.MODUL
+            if m >= settings.MODUL / 2:
+                key_code += 1
+            key_str += settings.APLHABET[int(key_code)]
+        return key_str

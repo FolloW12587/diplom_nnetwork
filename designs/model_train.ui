@@ -198,9 +198,9 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="textLoss">
+     <widget class="QLabel" name="textLoss">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -211,14 +211,8 @@
         <height>0</height>
        </size>
       </property>
-      <property name="maximumSize">
-       <size>
-        <width>50</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
+      <property name="text">
+       <string>0</string>
       </property>
      </widget>
     </item>
@@ -250,7 +244,7 @@
        </size>
       </property>
       <property name="text">
-       <string>Средняя абсолютная ошибка</string>
+       <string>Средняя абсолютная ошибка:</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -261,9 +255,9 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="textAcc">
+     <widget class="QLabel" name="textAcc">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -274,11 +268,8 @@
         <height>0</height>
        </size>
       </property>
-      <property name="maximumSize">
-       <size>
-        <width>50</width>
-        <height>16777215</height>
-       </size>
+      <property name="text">
+       <string>0</string>
       </property>
      </widget>
     </item>

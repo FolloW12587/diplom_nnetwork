@@ -57,16 +57,6 @@
     <string>Количество образов:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="textTrainCount">
-   <property name="geometry">
-    <rect>
-     <x>570</x>
-     <y>10</y>
-     <width>51</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="labelTestTitle">
    <property name="geometry">
     <rect>
@@ -98,16 +88,6 @@
     <string>Количество образов:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="textTestCount">
-   <property name="geometry">
-    <rect>
-     <x>570</x>
-     <y>170</y>
-     <width>51</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="labelTrainCountAliens">
    <property name="geometry">
     <rect>
@@ -134,26 +114,6 @@
     <string>Количество своих:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="textTrainCountOurs">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>40</y>
-     <width>51</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="textTrainCountAliens">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>100</y>
-     <width>51</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="labelTrainOursError">
    <property name="geometry">
     <rect>
@@ -165,16 +125,6 @@
    </property>
    <property name="text">
     <string>Количество ложных срабатывний:</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="textTrainOursError">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>40</y>
-     <width>51</width>
-     <height>20</height>
-    </rect>
    </property>
   </widget>
   <widget class="QLabel" name="labelTrainOursRatioError">
@@ -190,16 +140,6 @@
     <string>Отношение ложных срабатываний ко всем &quot;своим&quot; образам:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="textTrainRatioError">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>70</y>
-     <width>51</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="labelTrainAvgAcc">
    <property name="geometry">
     <rect>
@@ -211,16 +151,6 @@
    </property>
    <property name="text">
     <string>Средняя точность:</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="textTrainAvgAcc">
-   <property name="geometry">
-    <rect>
-     <x>570</x>
-     <y>40</y>
-     <width>51</width>
-     <height>20</height>
-    </rect>
    </property>
   </widget>
   <widget class="QLabel" name="labelTrainAliensError">
@@ -236,16 +166,6 @@
     <string>Количество ложных пропусков:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="textTrainAliensError">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>100</y>
-     <width>51</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="labelTrainAliensRatioError">
    <property name="geometry">
     <rect>
@@ -259,16 +179,6 @@
     <string>Отношение ложных пропусков ко всем &quot;чужим&quot; образам: </string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="textTrainAliensRatioError">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>130</y>
-     <width>51</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="labelTrainHemmingDistance">
    <property name="geometry">
     <rect>
@@ -280,36 +190,6 @@
    </property>
    <property name="text">
     <string>Среднее расстояние Хэмминга от истинного ключа:</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="textTrainHemmingDistance">
-   <property name="geometry">
-    <rect>
-     <x>700</x>
-     <y>100</y>
-     <width>51</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="textTestHemmingDistance">
-   <property name="geometry">
-    <rect>
-     <x>700</x>
-     <y>260</y>
-     <width>51</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="textTestAliensRatioError">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>290</y>
-     <width>51</width>
-     <height>20</height>
-    </rect>
    </property>
   </widget>
   <widget class="QLabel" name="labelTestAliensError">
@@ -349,26 +229,6 @@
    </property>
    <property name="text">
     <string>Средняя точность:</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="textTestCountOurs">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>200</y>
-     <width>51</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="textTestCountAliens">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>260</y>
-     <width>51</width>
-     <height>20</height>
-    </rect>
    </property>
   </widget>
   <widget class="QLabel" name="labelTestOursRatioError">
@@ -423,36 +283,6 @@
     <string>Количество чужих:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="textTestOursError">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>200</y>
-     <width>51</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="textTestRatioError">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>230</y>
-     <width>51</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="textTestAvgAcc">
-   <property name="geometry">
-    <rect>
-     <x>570</x>
-     <y>200</y>
-     <width>51</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="labelTestHemmingDistance">
    <property name="geometry">
     <rect>
@@ -466,14 +296,238 @@
     <string>Среднее расстояние Хэмминга от истинного ключа:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="textTestAliensError">
+  <widget class="QLabel" name="textTrainCount">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>10</y>
+     <width>47</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTrainAvgAcc">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>40</y>
+     <width>47</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTrainHemmingDistance">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>100</y>
+     <width>47</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTestCount">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>170</y>
+     <width>47</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTestAvgAcc">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>200</y>
+     <width>47</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTestHemmingDistance">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>260</y>
+     <width>47</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTrainOursError">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>40</y>
+     <width>47</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTrainRatioError">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>70</y>
+     <width>47</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTrainAliensError">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>100</y>
+     <width>47</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTrainAliensRatioError">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>130</y>
+     <width>47</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTestOursError">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>200</y>
+     <width>47</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTestAliensError">
    <property name="geometry">
     <rect>
      <x>370</x>
      <y>260</y>
-     <width>51</width>
-     <height>20</height>
+     <width>47</width>
+     <height>16</height>
     </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTestRatioError">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>230</y>
+     <width>47</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTestAliensRatioError">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>290</y>
+     <width>47</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTrainCountOurs">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>40</y>
+     <width>47</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTestCountOurs">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>200</y>
+     <width>47</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTrainCountAliens">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>100</y>
+     <width>47</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textTestCountAliens">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>260</y>
+     <width>47</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
    </property>
   </widget>
  </widget>
