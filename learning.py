@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets, QtCore
-from designs.design import Ui_MainWindow  
+from designs.learning_design import Ui_MainWindow  
 from designs.parser_design import Ui_Form as Ui_Form_parser
 from designs.model_train_design import Ui_Form as Ui_Form_model_train
 from designs.model_test_design import Ui_Form as Ui_Form_model_test
