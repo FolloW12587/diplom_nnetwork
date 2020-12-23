@@ -1,6 +1,5 @@
 import os 
 
-CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 PROC = 0.3
 STEP = 1024
 CHANNELS_NUM = 14
@@ -11,7 +10,6 @@ VERBOSE=1
 APLHABET = r"01"
 APLHABET_LEN = len(APLHABET)
 MODUL = 1/(APLHABET_LEN - 1)
-KEY_l = []
 
 KEY_l = [1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0,\
     1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0,\
