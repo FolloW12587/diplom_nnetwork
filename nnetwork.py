@@ -190,3 +190,6 @@ class NNetwork:
                 key_code += 1
             key_str += settings.APLHABET[int(key_code)]
         return key_str
+
+    def get_one_image(self, file_name):
+        return Parser.parse_one_image_from_file(file_name)

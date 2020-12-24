@@ -5,7 +5,6 @@ import sys
 import os
 
 from nnetwork import NNetwork
-from Parser import parse_one_image_from_file
 import settings 
 
 
@@ -73,7 +72,7 @@ class mywindow(QtWidgets.QMainWindow):
             f = open(file_name, 'r')
             f.close()
 
-            self.test_image = parse_one_image_from_file(file_name)
+            self.test_image = self.nnetwork.get_one_image(file_name)
             if self.test_image is None:
                 self.showErrorDialog('Error in getting image!')
                 return
