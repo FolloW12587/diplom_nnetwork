@@ -1,5 +1,4 @@
 from keras.callbacks import Callback
-from tensorflow.keras.callbacks import EarlyStopping
 from math import ceil
 
 import settings
