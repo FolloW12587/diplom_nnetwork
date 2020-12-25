@@ -73,7 +73,7 @@ class mywindow(QtWidgets.QMainWindow):
             self.showErrorDialog('Error in getting image!')
             return
 
-            self.ui.textDataUploaded.setText('Да')
+        self.ui.textDataUploaded.setText('Да')
 
 
     def authenticate(self):
