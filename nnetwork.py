@@ -169,7 +169,6 @@ class NNetwork:
         print('Полное количество "чужих" = {a:d}, количество ложных пропусков = {f:d}, отношение ложных пропусков ко всем "чужим" = {e:.5f}, среднее расстояние Хемминга = {hd_a:.5f}, max расстояние Хемминга = {hd_max:.5f}, min расстояние Хемминга = {hd_min:.5f}'.format(a=second_all, f=second_false, e=second_error, hd_a=second_hd_avg, hd_max=second_hd_max, hd_min=second_hd_min))
 
     def testOnData(self, x, y, form, data_type):
-        scores = self.model.evaluate(x, y)
         prediction = self.model.predict(x)
         self.score_errors(prediction, y, form, data_type)
 
@@ -177,9 +176,10 @@ class NNetwork:
         d = np.greater(np.abs(x - y), [settings.MODUL / 2]*len(x)).astype('int')
         return np.sum(d)
 
-    def getKeyOfImage(self, test_image):
-        prediction = self.model.predict(np.array([test_image,]))
-        return self.get_key_from_list(prediction[0])
+    def getKeyOfSetOfImages(self, images):
+        prediction = self.model.predict(images)
+        key_l = np.sum(prediction, axis=0) / prediction.shape[0]
+        return self.get_key_from_list(key_l)
 
     def get_key_from_list(self, l):
         key_str = ''
@@ -191,5 +191,5 @@ class NNetwork:
             key_str += settings.APLHABET[int(key_code)]
         return key_str
 
-    def get_one_image(self, file_name):
-        return Parser.parse_one_image_from_file(file_name)
+    def get_some_images(self, dir_name, num):
+        return np.array(Parser.get_data_from_dir(dir_name, num))

@@ -34,8 +34,8 @@ class mywindow(QtWidgets.QMainWindow):
 
         self.ui.buttonBrowseModel.clicked.connect(self.browseModel)
         self.ui.buttonUploadModel.clicked.connect(self.uploadModel)
-        self.ui.buttonBrowseDataFile.clicked.connect(self.browseDataFile)
-        self.ui.buttonUploadDataFile.clicked.connect(self.uploadFile)
+        self.ui.buttonBrowseDataFolder.clicked.connect(self.browseDataFolder)
+        self.ui.buttonUploadImages.clicked.connect(self.uploadImages)
         self.ui.buttonAuthenticate.clicked.connect(self.authenticate)
 
 
@@ -59,30 +59,22 @@ class mywindow(QtWidgets.QMainWindow):
         except IOError:
             self.showErrorDialog('File cannot be read!')
     
-    def browseDataFile(self):
-        fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', '')[0]
-        self.ui.textDataFileName.setText(fname)
+    def browseDataFolder(self):
+        dir_name = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Directory')
+        self.ui.textDataFileName.setText(dir_name)
     
-    def uploadFile(self):
+    def uploadImages(self):
         self.test_image = None
         self.ui.textDataUploaded.setText('Нет')
         
         file_name = self.ui.textDataFileName.text()
-        try:
-            f = open(file_name, 'r')
-            f.close()
-
-            self.test_image = self.nnetwork.get_one_image(file_name)
-            if self.test_image is None:
-                self.showErrorDialog('Error in getting image!')
-                return
+        self.test_image = self.nnetwork.get_some_images(file_name + '\\', 10)
+        if self.test_image is None:
+            self.showErrorDialog('Error in getting image!')
+            return
 
             self.ui.textDataUploaded.setText('Да')
-        except FileNotFoundError:
-            self.showErrorDialog('File not found!')
-            self.ui.textDataFileName.setText('')
-        except IOError:
-            self.showErrorDialog('File cannot be read!')
+
 
     def authenticate(self):
         if self.test_image is None:
@@ -93,7 +85,7 @@ class mywindow(QtWidgets.QMainWindow):
             self.showErrorDialog('You should upload model first!')
             return
 
-        key = self.nnetwork.getKeyOfImage(self.test_image)
+        key = self.nnetwork.getKeyOfSetOfImages(self.test_image)
         if not key:
             self.showErrorDialog('Error in authentification!')
             return

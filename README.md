@@ -26,6 +26,7 @@ All settings are in the `settings.py` file. Here're the default settings
 ```python
 PROC = 0.3                      # percentage of the train and test data split
 STEP = 1024                     # size of the data image
+LIMIT_DATA_TESTEE_COUNT = 0     # limit test persons for parse. If zero there is no limit.
 CHANNELS_NUM = 14               # number of channels in image
 BATCH_SIZE=32                   # batch size of trainig data
 EPOCHS=25                       # number of training iterations

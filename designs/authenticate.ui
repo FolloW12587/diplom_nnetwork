@@ -129,9 +129,9 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QPushButton" name="buttonBrowseDataFile">
+      <widget class="QPushButton" name="buttonBrowseDataFolder">
        <property name="text">
-        <string>Browse Data File</string>
+        <string>Browse Data Folder</string>
        </property>
       </widget>
      </item>
@@ -139,9 +139,9 @@
       <widget class="QLineEdit" name="textDataFileName"/>
      </item>
      <item>
-      <widget class="QPushButton" name="buttonUploadDataFile">
+      <widget class="QPushButton" name="buttonUploadImages">
        <property name="text">
-        <string>Upload Browsed DataFile</string>
+        <string>Upload Browsed Images</string>
        </property>
       </widget>
      </item>

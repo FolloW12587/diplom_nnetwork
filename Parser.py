@@ -20,17 +20,20 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
     y = lfilter(b, a, data)
     return y
 
-def butter_filter(df, lowcut, highcut, fs, order): #обработка каждого канала df фильтром нижних частот
+def butter_filter(df, lowcut, highcut, fs, order): # обработка каждого канала df фильтром нижних частот
     new_df = pd.DataFrame()
     for col in df:
         y = butter_bandpass_filter(df[col], lowcut, highcut, fs, order)
         new_df[col] = y
     return new_df
 
-def get_row(dir_name, form):        #получить сырые данные
+def get_row(dir_name, form):             # получить сырые данные
     dirs = os.listdir(dir_name)
-    dirs = dirs[0:2]                #уменьшить количество папок для теста парсера
-    ours_path = random.choice(dirs) #рандомно выбирает, чей образ будет свой
+
+    if settings.LIMIT_DATA_TESTEE_COUNT: # уменьшить количество папок для теста парсера, если включена данная настройка
+        dirs = dirs[0:settings.LIMIT_DATA_TESTEE_COUNT]      
+                  
+    ours_path = random.choice(dirs)      # случайно выбирает, чей образ будет свой
     form.parseProgressMaximumChanged.emit(len(dirs))
     cur_value = 0
     print('our_path = ', str(ours_path))
@@ -40,26 +43,38 @@ def get_row(dir_name, form):        #получить сырые данные
         form.parseProgressChanged.emit(cur_value)
         print(str(datetime.now()) + ' ' + directory)
         curr_path = dir_name + '\\' + directory + '\\'
-        for i in range(1, len(os.listdir(curr_path))):
-            if os.path.exists(curr_path + str(i) + r'.csv'):
-                df = pd.read_csv(curr_path + str(i) + r'.csv', skiprows=1, header=None,\
-                        names=['COUNTER','INTERPOLATED','AF3','F7','F3','FC5','T7','P7','O1','O2','P8','T8','FC6','F4','F8','AF4','RAW_CQ','GYROX','GYROY','MARKER','MARKER_HARDWARE','SYNC','TIME_STAMP_s','TIME_STAMP_ms','CQ_AF3','CQ_F7','CQ_F3','CQ_FC5','CQ_T7','CQ_P7','CQ_O1','CQ_O2','CQ_P8','CQ_T8','CQ_FC6','CQ_F4','CQ_F8','CQ_AF4','CQ_CMS','CQ_DRL'])
-                df = df[['AF3','F7','F3','FC5','T7','P7','O1','O2','P8','T8','FC6','F4','F8','AF4']]
-                df = df / 1000
-                df = butter_filter(df, 1, 40, 2000, 1)
-                for j in range(0, len(df), settings.STEP): #разбиваем на выборки по settings.STEP записей c settings.CHANNELS_NUM каналами
-                    if j + settings.STEP > len(df):
-                        break
-                    df_small = df.iloc[j:j + settings.STEP]
-                    df_small_n = np.asarray(df_small).transpose()  
-                    if directory in ours_path:
-                        our.append(df_small_n)
-                    else:
-                        alien.append(df_small_n)
+        data = get_data_from_dir(curr_path)
+        if directory == ours_path:
+            our += data
+        else: 
+            alien += data
         cur_value += 1
     form.parseProgressChanged.emit(cur_value)
     return our, alien
 
+def get_data_from_dir(path_name, num=0):
+    output = []
+    if num:
+        count = 0
+    for i in range(1, len(os.listdir(path_name))):
+        if os.path.exists(path_name + str(i) + r'.csv'):
+            df = pd.read_csv(path_name + str(i) + r'.csv', skiprows=1, header=None,\
+                    names=['COUNTER','INTERPOLATED','AF3','F7','F3','FC5','T7','P7','O1','O2','P8','T8','FC6','F4','F8','AF4','RAW_CQ','GYROX','GYROY','MARKER','MARKER_HARDWARE','SYNC','TIME_STAMP_s','TIME_STAMP_ms','CQ_AF3','CQ_F7','CQ_F3','CQ_FC5','CQ_T7','CQ_P7','CQ_O1','CQ_O2','CQ_P8','CQ_T8','CQ_FC6','CQ_F4','CQ_F8','CQ_AF4','CQ_CMS','CQ_DRL'])
+            df = df[['AF3','F7','F3','FC5','T7','P7','O1','O2','P8','T8','FC6','F4','F8','AF4']]
+            df = df / 1000
+            df = butter_filter(df, 1, 40, 2000, 1)
+            for j in range(0, len(df), settings.STEP): # разбиваем на выборки по settings.STEP записей c settings.CHANNELS_NUM каналами
+                if j + settings.STEP > len(df):
+                    break
+                df_small = df.iloc[j:j + settings.STEP]
+                df_small = np.asarray(df_small).transpose()  
+                output.append(df_small)
+                
+                if num:
+                    count += 1
+                    if count >= num:
+                        return output
+    return output
 
 def get_datasets(mass, i):
     len_test = int(len(mass) * settings.PROC)
@@ -83,16 +98,3 @@ def split_data(our, alien):
     x_test = alien_test + our_test
     y_test = alien_test_y + our_test_y
     return x_train, y_train, x_test, y_test
-
-def parse_one_image_from_file(file_name):
-    try:
-        df = pd.read_csv(file_name, skiprows=1, header=None,\
-            names=['COUNTER','INTERPOLATED','AF3','F7','F3','FC5','T7','P7','O1','O2','P8','T8','FC6','F4','F8','AF4','RAW_CQ','GYROX','GYROY','MARKER','MARKER_HARDWARE','SYNC','TIME_STAMP_s','TIME_STAMP_ms','CQ_AF3','CQ_F7','CQ_F3','CQ_FC5','CQ_T7','CQ_P7','CQ_O1','CQ_O2','CQ_P8','CQ_T8','CQ_FC6','CQ_F4','CQ_F8','CQ_AF4','CQ_CMS','CQ_DRL'])
-        df = df[['AF3','F7','F3','FC5','T7','P7','O1','O2','P8','T8','FC6','F4','F8','AF4']]
-        df = df / 1000
-        df = butter_filter(df, 1, 40, 2000, 1)
-        df = df.iloc[0:settings.STEP]
-        df = np.asarray(df).transpose()
-        return df
-    except:
-        return None
