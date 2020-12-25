@@ -68,7 +68,7 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.textDataUploaded.setText('Нет')
         
         file_name = self.ui.textDataFileName.text()
-        self.test_image = self.nnetwork.get_some_images(file_name + '\\', 10)
+        self.test_image = self.nnetwork.get_some_images(file_name + '\\', settings.COUNT_IMAGES_FOR_TEST)
         if self.test_image is None:
             self.showErrorDialog('Error in getting image!')
             return
