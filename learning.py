@@ -6,7 +6,7 @@ from designs.model_test_design import Ui_Form as Ui_Form_model_test
 import sys
 import os
 
-from nnetwork import NNetwork
+from nnetwork import NNetworkLearning
 import settings 
 
 
@@ -130,7 +130,7 @@ class mywindow(QtWidgets.QMainWindow):
         self.modelTrainForm = modelTrainForm(self)
         self.modelTestForm = modelTestForm()
 
-        self.nnetwork = NNetwork()
+        self.nnetwork = NNetworkLearning()
 
         self.ui.buttonBrowseModel.clicked.connect(self.browseModel)
         self.ui.buttonUploadModel.clicked.connect(self.uploadModel)

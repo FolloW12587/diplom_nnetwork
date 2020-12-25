@@ -4,7 +4,7 @@ from designs.is_authenticated_design import Ui_Form as Ui_Form_is_authenticated
 import sys
 import os
 
-from nnetwork import NNetwork
+from nnetwork import NNetworkAuth
 import settings 
 
 
@@ -29,7 +29,7 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
         self.isAuthenticatedForm = None
-        self.nnetwork = NNetwork()
+        self.nnetwork = NNetworkAuth()
         self.test_image = None
 
         self.ui.buttonBrowseModel.clicked.connect(self.browseModel)

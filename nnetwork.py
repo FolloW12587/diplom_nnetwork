@@ -14,11 +14,10 @@ import settings
 from model_callback import CustomCallback
 
 
-class NNetwork:
+class NNetworkAbstract:
     def __init__(self):
         self.model = None
         self.data = None
-
 
     def uploadModel(self, file):
         try:
@@ -29,7 +28,24 @@ class NNetwork:
         except:
             return False
         return True
-    
+
+    def get_key_from_list(self, l):
+        key_str = ''
+        for c in l:
+            m = c % settings.MODUL
+            key_code = (c - m)/settings.MODUL
+            if m >= settings.MODUL / 2:
+                key_code += 1
+            key_str += settings.APLHABET[int(key_code)]
+        return key_str
+
+    def hasRequiremets(self):
+        if self.model and self.data:
+            return True
+        return False
+
+
+class NNetworkLearning(NNetworkAbstract):
     def saveModel(self, file_name):
         if file_name:
             self.model.save(file_name, save_format='h5')
@@ -176,20 +192,12 @@ class NNetwork:
         d = np.greater(np.abs(x - y), [settings.MODUL / 2]*len(x)).astype('int')
         return np.sum(d)
 
-    def getKeyOfSetOfImages(self, images):
-        prediction = self.model.predict(images)
+
+class NNetworkAuth(NNetworkAbstract):
+    def getKeyOfSetOfImages(self):
+        prediction = self.model.predict(self.data)
         key_l = np.sum(prediction, axis=0) / prediction.shape[0]
         return self.get_key_from_list(key_l)
 
-    def get_key_from_list(self, l):
-        key_str = ''
-        for c in l:
-            m = c % settings.MODUL
-            key_code = (c - m)/settings.MODUL
-            if m >= settings.MODUL / 2:
-                key_code += 1
-            key_str += settings.APLHABET[int(key_code)]
-        return key_str
-
     def get_some_images(self, dir_name, num):
-        return np.array(Parser.get_data_from_dir(dir_name, num))
+        self.data = np.array(Parser.get_data_from_dir(dir_name, num))
