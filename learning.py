@@ -19,6 +19,7 @@ class parserForm(QtWidgets.QWidget):
         self.main_window = main_window
         self.ui.textProc.setText(str(settings.PROC))
         self.ui.textStep.setText(str(settings.STEP))
+        self.ui.textTesteeCount.setText(str(settings.LIMIT_DATA_TESTEE_COUNT))
 
         self.ui.buttonBrowseDataFolder.clicked.connect(self.browseParseData)
         self.ui.buttonParseData.clicked.connect(self.parseData)
@@ -29,9 +30,12 @@ class parserForm(QtWidgets.QWidget):
         self.ui.textBrowseDataFolder.setText(dir_name)
 
     def parseData(self):
+        if self.ui.textTesteeCount.text() == '':
+            self.ui.textTesteeCount.setText('0')
         try:
             settings.PROC = float(self.ui.textProc.text())
             settings.STEP = int(self.ui.textStep.text())
+            settings.LIMIT_DATA_TESTEE_COUNT = int(self.ui.textTesteeCount.text())
             dir_name = self.ui.textBrowseDataFolder.text()
             self.ui.buttonParseData.setEnabled(False)
             self.main_window.parseData(dir_name)

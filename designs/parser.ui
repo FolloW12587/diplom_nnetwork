@@ -19,7 +19,7 @@
      <x>20</x>
      <y>30</y>
      <width>361</width>
-     <height>121</height>
+     <height>141</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -33,19 +33,6 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="textStep"/>
-    </item>
-    <item row="2" column="0">
-     <widget class="QPushButton" name="buttonBrowseDataFolder">
-      <property name="text">
-       <string>Browse Data Folder</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="textBrowseDataFolder"/>
-    </item>
     <item row="4" column="0">
      <widget class="QLabel" name="labelProc">
       <property name="text">
@@ -56,8 +43,31 @@
       </property>
      </widget>
     </item>
+    <item row="2" column="0">
+     <widget class="QPushButton" name="buttonBrowseDataFolder">
+      <property name="text">
+       <string>Browse Data Folder</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="textStep"/>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="textBrowseDataFolder"/>
+    </item>
     <item row="4" column="1">
      <widget class="QLineEdit" name="textProc"/>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="labelTesteeCount">
+      <property name="text">
+       <string>Количество испытуемых:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="textTesteeCount"/>
     </item>
    </layout>
   </widget>
